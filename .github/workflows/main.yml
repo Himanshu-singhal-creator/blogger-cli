@@ -17,25 +17,6 @@ jobs:
           pip install black 
           black .
 
-
-   Custom-installation:
-    strategy:
-        matrix:
-            runs-on: [ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.runs-on }}
-
-    steps:
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.7
-      - name: Custom installation
-        run: |
-          curl https://hemanta212.github.io/blogger-cli/get_blogger.py | python3
-          source $HOME/local/.blogger_cli/venv/bin/activate
-          cd $HOME/local/.blogger_cli/venv/lib/python3.7/site-packages/blogger_cli/tests/
-          python -m unittest discover .
-
    Tests:
     strategy:
       matrix:
@@ -44,6 +25,17 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
 
     steps:
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+      - name: Custom installation
+        run: |
+          curl https://hemanta212.github.io/blogger-cli/get_blogger.py | python3
+          source $HOME/local/.blogger_cli/venv/bin/activate
+          cd $HOME/local/.blogger_cli/venv/lib/python3.7/site-packages/blogger_cli/tests/
+          python -m unittest discover .
+
     - uses: actions/checkout@v1
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
